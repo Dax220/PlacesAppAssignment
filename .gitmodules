@@ -1,0 +1,3 @@
+[submodule "wikipedia-ios"]
+	path = wikipedia-ios
+	url = https://github.com/Dax220/wikipedia-ios.git
