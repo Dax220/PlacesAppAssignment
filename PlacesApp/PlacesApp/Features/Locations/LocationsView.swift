@@ -10,18 +10,18 @@ import SwiftUI
 struct LocationsView: View {
     
     @Bindable var model: LocationsModel
-
+    @Bindable var searchModel: SearchModel
+    
     var body: some View {
         NavigationStack {
-            content
-                .navigationTitle("Places")
+            SearchableContent(searchModel: searchModel) {
+                content
+            }
+            .navigationTitle("Places")
+            .searchable(text: $searchModel.query, prompt: "Place name or coordinates")
         }
         .task { await model.load() }
-        .alert("Wikipedia Isn't Installed", isPresented: $model.isWikipediaMissing) {
-            Button("OK", role: .cancel) {}
-        } message: {
-            Text("Install the Wikipedia app to open this place on the map.")
-        }
+        .wikipediaMissingAlert(isPresented: $model.isWikipediaMissing)
     }
 
     @ViewBuilder
@@ -66,6 +66,21 @@ struct LocationsView: View {
                 }
                 .padding()
             }
+        }
+    }
+}
+
+private struct SearchableContent<Content: View>: View {
+    
+    @Environment(\.isSearching) private var isSearching
+    let searchModel: SearchModel
+    @ViewBuilder let content: Content
+    
+    var body: some View {
+        if isSearching {
+            SearchView(model: searchModel)
+        } else {
+            content
         }
     }
 }
