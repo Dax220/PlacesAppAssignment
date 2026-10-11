@@ -9,7 +9,7 @@ import SwiftUI
 
 struct LocationsView: View {
     
-    let model: LocationsModel
+    @Bindable var model: LocationsModel
 
     var body: some View {
         NavigationStack {
@@ -17,6 +17,11 @@ struct LocationsView: View {
                 .navigationTitle("Places")
         }
         .task { await model.load() }
+        .alert("Wikipedia Isn't Installed", isPresented: $model.isWikipediaMissing) {
+            Button("OK", role: .cancel) {}
+        } message: {
+            Text("Install the Wikipedia app to open this place on the map.")
+        }
     }
 
     @ViewBuilder

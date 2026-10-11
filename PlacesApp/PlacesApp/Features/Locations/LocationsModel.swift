@@ -17,6 +17,8 @@ final class LocationsModel {
         case loaded([Location])
     }
 
+    var isWikipediaMissing = false
+    
     private(set) var state: State = .loading
 
     private let repository: any LocationsRepository
@@ -42,6 +44,6 @@ final class LocationsModel {
 
     func select(_ location: Location) async {
         let url = WikipediaDeepLink.places(lat: location.lat, lon: location.lon)
-        await opener.open(url)
+        isWikipediaMissing = !(await opener.open(url))
     }
 }

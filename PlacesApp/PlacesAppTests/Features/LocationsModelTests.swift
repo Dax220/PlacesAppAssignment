@@ -72,4 +72,23 @@ struct LocationsModelTests {
 
         #expect(opener.openedURLs == [URL(string: "wikipedia://places?lat=52.3547498&lon=4.8339215")!])
     }
+    
+    @Test func selectingLocationWithWikipediaShowsNoAlert() async {
+        let (model, _) = makeModel(.success([amsterdam]))
+
+        await model.select(amsterdam)
+
+        #expect(model.isWikipediaMissing == false)
+    }
+
+    @Test func selectingLocationWithoutWikipediaShowsAlert() async {
+        let model = LocationsModel(
+            repository: FakeLocationsRepository(results: [.success([amsterdam])]),
+            opener: FakeURLOpener(canOpen: false)
+        )
+
+        await model.select(amsterdam)
+
+        #expect(model.isWikipediaMissing)
+    }
 }

@@ -8,6 +8,5 @@
 import Foundation
 
 protocol URLOpening {
-    @discardableResult
     func open(_ url: URL) async -> Bool
 }

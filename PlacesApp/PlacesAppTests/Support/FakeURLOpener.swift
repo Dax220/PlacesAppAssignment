@@ -11,9 +11,14 @@ import Foundation
 final class FakeURLOpener: URLOpening {
     
     private(set) var openedURLs: [URL] = []
+    private let canOpen: Bool
+
+    init(canOpen: Bool = true) {
+        self.canOpen = canOpen
+    }
 
     func open(_ url: URL) async -> Bool {
         openedURLs.append(url)
-        return true
+        return canOpen
     }
 }
