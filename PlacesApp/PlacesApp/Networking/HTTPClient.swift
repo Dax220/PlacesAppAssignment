@@ -11,6 +11,8 @@ nonisolated protocol HTTPClient: Sendable {
     func data(for request: URLRequest) async throws -> (Data, URLResponse)
 }
 
+nonisolated extension URLSession: HTTPClient {}
+
 extension HTTPClient {
 
     nonisolated func get<T: Decodable & Sendable>(_ request: URLRequest) async throws -> T {
