@@ -76,3 +76,48 @@ struct PlaceCardContentTests {
         #expect(content.accessibilityValue == "Latitude 52.3547, longitude 4.8339")
     }
 }
+
+@MainActor
+struct PlaceCardContentSearchResultTests {
+    private let enUS = Locale(identifier: "en_US")
+
+    @Test func locationCardHasNoSubtitle() {
+        let content = PlaceCardContent(location: Location(name: "Amsterdam", lat: 1, lon: 2), locale: enUS)
+
+        #expect(content.subtitle == nil)
+    }
+
+    @Test func usesTitleAndSubtitle() {
+        let result = PlaceSearchResult(
+            title: "Rijksmuseum",
+            subtitle: "Museumstraat 1, 1071 XX Amsterdam, Netherlands",
+            lat: 52.36,
+            lon: 4.885
+        )
+
+        let content = PlaceCardContent(result: result, locale: enUS)
+
+        #expect(content.title == "Rijksmuseum")
+        #expect(content.subtitle == "Museumstraat 1, 1071 XX Amsterdam, Netherlands")
+        #expect(content.latitude == "52.36")
+        #expect(content.longitude == "4.885")
+    }
+
+    @Test(arguments: [nil, "", "  "] as [String?])
+    func omitsMissingSubtitle(subtitle: String?) {
+        let result = PlaceSearchResult(title: "Custom location", subtitle: subtitle, lat: 52.3676, lon: 4.9041)
+
+        let content = PlaceCardContent(result: result, locale: enUS)
+
+        #expect(content.subtitle == nil)
+        #expect(content.accessibilityLabel == "Custom location")
+    }
+
+    @Test func readsSubtitleWithTitleForVoiceOver() {
+        let result = PlaceSearchResult(title: "Rijksmuseum", subtitle: "Museumstraat 1, Amsterdam", lat: 52.36, lon: 4.885)
+
+        let content = PlaceCardContent(result: result, locale: enUS)
+
+        #expect(content.accessibilityLabel == "Rijksmuseum, Museumstraat 1, Amsterdam")
+    }
+}

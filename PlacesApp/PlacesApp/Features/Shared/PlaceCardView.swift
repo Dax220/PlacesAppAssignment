@@ -17,7 +17,15 @@ struct PlaceCardView: View {
                 LabeledContent("Latitude", value: content.latitude)
                 LabeledContent("Longitude", value: content.longitude)
             } label: {
-                Label(content.title, systemImage: "mappin.and.ellipse")
+                VStack(alignment: .leading, spacing: 6) {
+                    Label(content.title, systemImage: "mappin.and.ellipse")
+                    if let subtitle = content.subtitle {
+                        Text(subtitle)
+                            .font(.subheadline)
+                            .foregroundStyle(.secondary)
+                    }
+                }
+                .padding(.vertical, 4)
             }
             .labeledContentStyle(.adaptive)
         }
@@ -53,3 +61,36 @@ struct PlaceCardView: View {
     .padding()
     .dynamicTypeSize(.accessibility5)
 }
+
+#Preview("Search result with address") {
+    PlaceCardView(
+        content: PlaceCardContent(result: rijksmuseum),
+        action: {}
+    )
+    .padding()
+}
+
+#Preview("Search result with address, accessibility size 2") {
+    PlaceCardView(
+        content: PlaceCardContent(result: rijksmuseum),
+        action: {}
+    )
+    .padding()
+    .dynamicTypeSize(.accessibility2)
+}
+
+#Preview("Search result with address, accessibility size 5") {
+    PlaceCardView(
+        content: PlaceCardContent(result: rijksmuseum),
+        action: {}
+    )
+    .padding()
+    .dynamicTypeSize(.accessibility5)
+}
+
+private let rijksmuseum = PlaceSearchResult(
+    title: "Rijksmuseum",
+    subtitle: "Museumstraat 1, 1071 XX Amsterdam, Netherlands",
+    lat: 52.359827,
+    lon: 4.8850165
+)
