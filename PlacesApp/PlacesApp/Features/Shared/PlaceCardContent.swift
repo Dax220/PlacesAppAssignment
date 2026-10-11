@@ -21,7 +21,9 @@ struct PlaceCardContent: Equatable {
 
 extension PlaceCardContent {
     
-    init(location: Location, locale: Locale = .current) {
+    /// The app is English-only, so numbers use the English format to match the text
+    /// and VoiceOver reads them correctly in any region.
+    init(location: Location, locale: Locale = Locale(identifier: "en")) {
         let name = location.name?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
         self.init(
             title: name.isEmpty ? String(localized: "Unnamed location") : name,
