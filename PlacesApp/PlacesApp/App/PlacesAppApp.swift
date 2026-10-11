@@ -9,9 +9,12 @@ import SwiftUI
 
 @main
 struct PlacesAppApp: App {
+    
+    @State private var dependencies = AppDependencies()
+    
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            LocationsView(model: dependencies.locationsModel)
         }
     }
 }
