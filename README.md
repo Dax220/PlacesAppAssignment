@@ -9,6 +9,14 @@ Two apps:
 
     git clone --recurse-submodules https://github.com/Dax220/PlacesAppAssignment.git
 
+## PlacesApp
+
+- **Running on a device:** create `Local.xcconfig` next to `Base.xcconfig` in `PlacesApp/Config/` with your team ID:
+  ```
+  DEVELOPMENT_TEAM = YOUR_TEAM_ID
+  ```
+  `Base.xcconfig` includes this file if it exists, and git ignores it, so the team ID stays out of the repository.  
+
 ## Wikipedia changes
 
 All changes: [compare with upstream](https://github.com/Dax220/wikipedia-ios/compare/main...places-deeplink)

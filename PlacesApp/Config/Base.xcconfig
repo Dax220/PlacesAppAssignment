@@ -1,0 +1,11 @@
+//
+//  Base.xcconfig
+//  PlacesApp
+//
+//  Created by Maxim Tischenko on 11.10.2026.
+//
+
+// Configuration settings file format documentation can be found at:
+// https://developer.apple.com/documentation/xcode/adding-a-build-configuration-file-to-your-project
+
+#include? "Local.xcconfig"
