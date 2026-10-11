@@ -68,13 +68,24 @@ final class SearchModel {
             state = .idle
             return
         }
-
+        
+        if let coordinate = CoordinateParser.parse(trimmedQuery) {
+            state = .results([PlaceSearchResult(
+                title: String(localized: "Custom location"),
+                subtitle: nil,
+                lat: coordinate.lat,
+                lon: coordinate.lon
+            )])
+            return
+        }
+        
         searchTask = Task { [weak self, repository] in
             do {
                 try await Task.sleep(for: delay)
                 
                 try Task.checkCancellation()
                 self?.state = .searching
+                
                 let results = try await repository.search(trimmedQuery)
                 
                 try Task.checkCancellation()

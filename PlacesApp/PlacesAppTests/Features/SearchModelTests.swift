@@ -123,6 +123,8 @@ struct SearchModelTests {
 
         await repository.resume()
         await inFlightSearch?.value
+        
+        #expect(inFlightSearch?.isCancelled == true)
         #expect(model.state == .idle)
     }
 
@@ -145,5 +147,34 @@ struct SearchModelTests {
         await model.select(rijksmuseum)
 
         #expect(model.isWikipediaMissing)
+    }
+    
+    @Test func pastedCoordinatesShowCustomLocationWithoutSearch() async {
+        let (model, repository) = makeModel(.success([rijksmuseum]))
+        
+        model.query = "52.3676, 4.9041"
+        await model.searchTask?.value
+        
+        #expect(model.state == .results([
+            PlaceSearchResult(title: "Custom location", subtitle: nil, lat: 52.3676, lon: 4.9041),
+        ]))
+        #expect(await repository.queries.isEmpty)
+    }
+    
+    @Test func pastedCoordinatesCancelRunningSearch() async {
+        let (model, repository) = makeModel(.success([rijksmuseum]))
+        await repository.suspend()
+        model.query = "52.3"
+        await repository.waitForSearch()
+        let inFlightSearch = model.searchTask
+        
+        model.query = "52.3676, 4.9041"
+        await repository.resume()
+        await inFlightSearch?.value
+        
+        #expect(inFlightSearch?.isCancelled == true)
+        #expect(model.state == .results([
+            PlaceSearchResult(title: "Custom location", subtitle: nil, lat: 52.3676, lon: 4.9041),
+        ]))
     }
 }
