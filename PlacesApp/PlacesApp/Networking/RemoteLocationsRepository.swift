@@ -19,6 +19,7 @@ nonisolated struct RemoteLocationsRepository: LocationsRepository {
 
     func fetchLocations() async throws -> [Location] {
         let response: LocationsResponseDTO = try await client.get(URLRequest(url: url))
-        return response.locations.map(\.location)
+        var seen = Set<Location>()
+        return response.locations.map(\.location).filter { seen.insert($0).inserted }
     }
 }

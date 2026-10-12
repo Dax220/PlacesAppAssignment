@@ -10,18 +10,18 @@ import SwiftUI
 struct LocationsView: View {
     
     @Bindable var model: LocationsModel
-
+    @Bindable var searchModel: SearchModel
+    
     var body: some View {
         NavigationStack {
-            content
-                .navigationTitle("Places")
+            SearchableContent(searchModel: searchModel) {
+                content
+            }
+            .navigationTitle(.placesTitle)
+            .searchable(text: $searchModel.query, prompt: Text(.searchPrompt))
         }
         .task { await model.load() }
-        .alert("Wikipedia Isn't Installed", isPresented: $model.isWikipediaMissing) {
-            Button("OK", role: .cancel) {}
-        } message: {
-            Text("Install the Wikipedia app to open this place on the map.")
-        }
+        .wikipediaMissingAlert(isPresented: $model.isWikipediaMissing)
     }
 
     @ViewBuilder
@@ -31,16 +31,16 @@ struct LocationsView: View {
             
         case .loading:
             
-            ProgressView("Loading places…")
+            ProgressView(.placesLoading)
             
         case .failed:
             
             ContentUnavailableView {
-                Label("Couldn't Load Places", systemImage: "wifi.exclamationmark")
+                Label(.placesErrorTitle, systemImage: "wifi.exclamationmark")
             } description: {
-                Text("Check your connection and try again.")
+                Text(.commonErrorConnectionMessage)
             } actions: {
-                Button("Try Again") {
+                Button(.commonActionTryAgain) {
                     Task { await model.load() }
                 }
                 .buttonStyle(.borderedProminent)
@@ -49,16 +49,16 @@ struct LocationsView: View {
         case .loaded(let locations) where locations.isEmpty:
             
             ContentUnavailableView(
-                "No Places",
+                .placesEmptyTitle,
                 systemImage: "mappin.slash",
-                description: Text("There are no places to show.")
+                description: Text(.placesEmptyMessage)
             )
             
         case .loaded(let locations):
             
             ScrollView {
                 LazyVStack(spacing: 12) {
-                    ForEach(Array(locations.enumerated()), id: \.offset) { _, location in
+                    ForEach(locations, id: \.self) { location in
                         PlaceCardView(content: PlaceCardContent(location: location)) {
                             Task { await model.select(location) }
                         }
@@ -66,6 +66,21 @@ struct LocationsView: View {
                 }
                 .padding()
             }
+        }
+    }
+}
+
+private struct SearchableContent<Content: View>: View {
+    
+    @Environment(\.isSearching) private var isSearching
+    let searchModel: SearchModel
+    @ViewBuilder let content: Content
+    
+    var body: some View {
+        if isSearching {
+            SearchView(model: searchModel)
+        } else {
+            content
         }
     }
 }

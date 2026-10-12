@@ -7,7 +7,7 @@
 
 import Foundation
 
-nonisolated struct Location: Sendable, Equatable {
+nonisolated struct Location: Sendable, Hashable {
     let name: String?
     let lat: Double
     let lon: Double

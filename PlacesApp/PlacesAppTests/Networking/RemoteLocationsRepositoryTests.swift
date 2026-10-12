@@ -27,6 +27,19 @@ struct RemoteLocationsRepositoryTests {
         ])
     }
 
+    @Test func dropsDuplicatesKeepingFirstOccurrence() async throws {
+        let client = FakeHTTPClient(data: Fixtures.locationsWithDuplicatesJSONData)
+        let repository = RemoteLocationsRepository(client: client, url: testUrl)
+
+        let locations = try await repository.fetchLocations()
+
+        #expect(locations == [
+            Location(name: "Amsterdam", lat: 52.3547498, lon: 4.8339215),
+            Location(name: "Mumbai", lat: 19.0823998, lon: 72.8111468),
+            Location(name: "Amsterdam", lat: 52.3676, lon: 4.9041),
+        ])
+    }
+
     @Test func propagatesNetworkErrors() async {
         let client = FakeHTTPClient(data: Data(), statusCode: 503)
         let repository = RemoteLocationsRepository(client: client, url: testUrl)

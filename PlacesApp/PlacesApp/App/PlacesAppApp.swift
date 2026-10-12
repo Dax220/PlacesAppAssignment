@@ -14,7 +14,10 @@ struct PlacesAppApp: App {
     
     var body: some Scene {
         WindowGroup {
-            LocationsView(model: dependencies.locationsModel)
+            LocationsView(
+                model: dependencies.locationsModel,
+                searchModel: dependencies.searchModel
+            )
         }
     }
 }
