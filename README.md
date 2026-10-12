@@ -12,15 +12,18 @@ Two apps:
 Install the Wikipedia fork on the simulator or device first, then run PlacesApp on the same one.
 Without Wikipedia, tapping a place shows an alert.
 
-## PlacesApp
-
-Xcode 26 or later, iOS 17.6+.
-
-- **Running on a device:** create `Local.xcconfig` next to `Base.xcconfig` in `PlacesApp/Config/` with your team ID:
+- **Running Wikipedia on a device:** follow the [original setup instructions](https://github.com/wikimedia/wikipedia-ios#building-and-running)
+  (run `./scripts/setup` in `wikipedia-ios` and enter your team ID when asked).  
+- **Running PlacesApp on a device:** create `Local.xcconfig` next to `Base.xcconfig` in `PlacesApp/Config/` with your team ID:
   ```
   DEVELOPMENT_TEAM = YOUR_TEAM_ID
   ```
   `Base.xcconfig` includes this file if it exists, and git ignores it, so the team ID stays out of the repository.  
+
+## PlacesApp
+
+Xcode 26 or later, iOS 17.6+.
+
 - **Tests:** run with ⌘U in Xcode. Written with Swift Testing. Dependencies such as the HTTP client and repositories are replaced with fakes.
 
 ### What it does
@@ -44,7 +47,7 @@ Decisions the assignment leaves open:
   also type a place name, and the app finds it with MapKit.
 - **Wikipedia isn't installed:** tapping a place shows an alert.
 - **A place without a name** is shown as "Unnamed location".
-- **N****ow English only.** All strings are in the string catalog, so a new language needs no code changes.
+- **English only for now.** All strings are in the string catalog, so a new language needs no code changes.
 
 ### Structure
 
@@ -92,9 +95,7 @@ from the catalog (`Text(.searchIdleTitle)`), so a mistyped key doesn't compile.
 ## Wikipedia changes
 
 All changes: [compare with upstream](https://github.com/Dax220/wikipedia-ios/compare/main...places-deeplink)
-  
-- **Running on a device:** follow the [original setup instructions](https://github.com/wikimedia/wikipedia-ios#building-and-running)
-  (run `./scripts/setup` in `wikipedia-ios` and enter your team ID when asked).  
+
 - **Opens on the Places tab at launch**, as the assignment requires (`launchTab` in `WMFAppViewController`).
 - **Deep link with coordinates:** `wikipedia://places?lat=52.3676&lon=4.9041` opens Places tab centered on the given location
   instead of the current one. Missing or invalid coordinates fall back to the regular Places tab.
