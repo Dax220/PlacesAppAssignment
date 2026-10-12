@@ -7,7 +7,7 @@
 
 import Foundation
 
-nonisolated struct PlaceSearchResult: Sendable, Equatable {
+nonisolated struct PlaceSearchResult: Sendable, Hashable {
     let title: String
     let subtitle: String?
     let lat: Double

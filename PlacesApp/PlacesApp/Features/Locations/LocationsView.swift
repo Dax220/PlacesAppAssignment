@@ -58,7 +58,7 @@ struct LocationsView: View {
             
             ScrollView {
                 LazyVStack(spacing: 12) {
-                    ForEach(Array(locations.enumerated()), id: \.offset) { _, location in
+                    ForEach(locations, id: \.self) { location in
                         PlaceCardView(content: PlaceCardContent(location: location)) {
                             Task { await model.select(location) }
                         }
