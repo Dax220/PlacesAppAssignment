@@ -27,23 +27,23 @@ struct SearchView: View {
         case .idle:
             
             ContentUnavailableView(
-                "Find a Place",
+                .searchIdleTitle,
                 systemImage: "magnifyingglass",
-                description: Text("Type a place name or paste coordinates, like 52.3676, 4.9041.")
+                description: Text(.searchIdleMessage)
             )
             
         case .searching:
             
-            ProgressView("Searching…")
+            ProgressView(.searchLoading)
             
         case .failed:
             
             ContentUnavailableView {
-                Label("Search Failed", systemImage: "wifi.exclamationmark")
+                Label(.searchErrorTitle, systemImage: "wifi.exclamationmark")
             } description: {
-                Text("Check your connection and try again.")
+                Text(.commonErrorConnectionMessage)
             } actions: {
-                Button("Try Again") {
+                Button(.commonActionTryAgain) {
                     model.retry()
                 }
                 .buttonStyle(.borderedProminent)
@@ -71,9 +71,9 @@ struct SearchView: View {
     private func announce(_ state: SearchModel.State) {
         switch state {
         case .results(let results):
-            AccessibilityNotification.Announcement(String(localized: "\(results.count) results")).post()
+            AccessibilityNotification.Announcement(String(localized: .searchAnnouncementResults(results.count))).post()
         case .noResults:
-            AccessibilityNotification.Announcement(String(localized: "No results")).post()
+            AccessibilityNotification.Announcement(String(localized: .searchAnnouncementNoResults)).post()
         case .idle, .searching, .failed:
             break
         }

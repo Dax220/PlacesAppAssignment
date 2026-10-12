@@ -17,8 +17,8 @@ struct LocationsView: View {
             SearchableContent(searchModel: searchModel) {
                 content
             }
-            .navigationTitle("Places")
-            .searchable(text: $searchModel.query, prompt: "Place name or coordinates")
+            .navigationTitle(.placesTitle)
+            .searchable(text: $searchModel.query, prompt: Text(.searchPrompt))
         }
         .task { await model.load() }
         .wikipediaMissingAlert(isPresented: $model.isWikipediaMissing)
@@ -31,16 +31,16 @@ struct LocationsView: View {
             
         case .loading:
             
-            ProgressView("Loading places…")
+            ProgressView(.placesLoading)
             
         case .failed:
             
             ContentUnavailableView {
-                Label("Couldn't Load Places", systemImage: "wifi.exclamationmark")
+                Label(.placesErrorTitle, systemImage: "wifi.exclamationmark")
             } description: {
-                Text("Check your connection and try again.")
+                Text(.commonErrorConnectionMessage)
             } actions: {
-                Button("Try Again") {
+                Button(.commonActionTryAgain) {
                     Task { await model.load() }
                 }
                 .buttonStyle(.borderedProminent)
@@ -49,9 +49,9 @@ struct LocationsView: View {
         case .loaded(let locations) where locations.isEmpty:
             
             ContentUnavailableView(
-                "No Places",
+                .placesEmptyTitle,
                 systemImage: "mappin.slash",
-                description: Text("There are no places to show.")
+                description: Text(.placesEmptyMessage)
             )
             
         case .loaded(let locations):

@@ -9,10 +9,10 @@ import SwiftUI
 
 extension View {
     func wikipediaMissingAlert(isPresented: Binding<Bool>) -> some View {
-        alert("Wikipedia Isn't Installed", isPresented: isPresented) {
-            Button("OK", role: .cancel) {}
+        alert(.wikipediaMissingTitle, isPresented: isPresented) {
+            Button(.commonActionOk, role: .cancel) {}
         } message: {
-            Text("Install the Wikipedia app to open this place on the map.")
+            Text(.wikipediaMissingMessage)
         }
     }
 }

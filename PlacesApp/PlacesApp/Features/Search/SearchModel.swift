@@ -71,7 +71,7 @@ final class SearchModel {
         
         if let coordinate = CoordinateParser.parse(trimmedQuery) {
             state = .results([PlaceSearchResult(
-                title: String(localized: "Custom location"),
+                title: String(localized: .searchCustomLocationTitle),
                 subtitle: nil,
                 lat: coordinate.lat,
                 lon: coordinate.lon

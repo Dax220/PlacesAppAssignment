@@ -19,7 +19,7 @@ struct PlaceCardContent: Equatable {
     }
 
     var accessibilityValue: String {
-        String(localized: "Latitude \(latitude), longitude \(longitude)")
+        String(localized: .placeCardAccessibilityValue(latitude, longitude))
     }
 }
 
@@ -30,7 +30,7 @@ extension PlaceCardContent {
     init(location: Location, locale: Locale = Locale(identifier: "en")) {
         let name = location.name?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
         self.init(
-            title: name.isEmpty ? String(localized: "Unnamed location") : name,
+            title: name.isEmpty ? String(localized: .placeCardUnnamed) : name,
             subtitle: nil,
             latitude: Self.format(location.lat, locale: locale),
             longitude: Self.format(location.lon, locale: locale)

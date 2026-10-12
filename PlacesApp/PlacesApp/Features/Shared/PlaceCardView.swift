@@ -14,8 +14,8 @@ struct PlaceCardView: View {
     var body: some View {
         Button(action: action) {
             GroupBox {
-                LabeledContent("Latitude", value: content.latitude)
-                LabeledContent("Longitude", value: content.longitude)
+                LabeledContent { Text(content.latitude) } label: { Text(.placeCardLatitude) }
+                LabeledContent { Text(content.longitude) } label: { Text(.placeCardLongitude) }
             } label: {
                 VStack(alignment: .leading, spacing: 6) {
                     Label(content.title, systemImage: "mappin.and.ellipse")
@@ -32,7 +32,7 @@ struct PlaceCardView: View {
         .buttonStyle(.plain)
         .accessibilityLabel(content.accessibilityLabel)
         .accessibilityValue(content.accessibilityValue)
-        .accessibilityHint("Opens in Wikipedia")
+        .accessibilityHint(Text(.placeCardAccessibilityHint))
     }
 }
 
