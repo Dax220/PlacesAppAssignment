@@ -50,17 +50,19 @@ Decisions the assignment leaves open:
 
 ```
 PlacesApp/
-  App/          entry point, AppDependencies (composition root), SystemURLOpener (the only UIKit code)
-  Domain/       models, repository protocols, CoordinateParser, WikipediaDeepLink
-  Features/     screens with their models, Shared for code used by both screens
-  Networking/   HTTP client, DTOs, repository implementations
+  App/        entry point, AppDependencies (composition root), SystemURLOpener (the only UIKit code)
+  Domain/     models, repository protocols, CoordinateParser, WikipediaDeepLink
+  Data/       HTTP client, DTOs, repository implementations
+  Features/   screens with their models, Shared for code used by both screens
 ```
+
+Inside Domain, Data and Features, feature code is grouped into `Locations/` and `Search/`. Tests follow the same layout.
 
 Models are `@Observable` and depend on protocols. Real implementations are created in `AppDependencies`, tests use fakes.
 
 ### Concurrency
 
-- Swift 6 language mode, main actor by default. Domain and networking types are `nonisolated` and `Sendable`.
+- Swift 6 language mode, main actor by default. Domain and data types are `nonisolated` and `Sendable`.
 - The app uses async/await. Each search is a `Task` that waits for the debounce with `Task.sleep` and then searches.
   A new query cancels the previous task, whether it is still waiting or already searching, so old results never
   replace newer ones. No timers or Combine needed.
