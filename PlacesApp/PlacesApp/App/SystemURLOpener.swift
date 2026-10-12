@@ -10,6 +10,10 @@ import UIKit
 struct SystemURLOpener: URLOpening {
     
     func open(_ url: URL) async -> Bool {
-        await UIApplication.shared.open(url)
+        if UIApplication.shared.canOpenURL(url) {
+            await UIApplication.shared.open(url)
+            return true
+        }
+        return false
     }
 }
